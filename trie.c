@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "intstack.c"
+#include "stack.c"
 
 const int ASCII = 97;
 
