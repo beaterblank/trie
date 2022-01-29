@@ -1,5 +1,6 @@
 #include "trie.c"
 #include <ncurses.h>
+
 int main(){
     trie root = init('/');
     insert("teja",root);

@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "stack.c"
+#include <string.h>
+
+#include "istack.c"
+#include "sstack.c"
 
 const int ASCII = 97;
 
@@ -11,21 +14,19 @@ typedef struct node node;
 
 struct node{
     char value;
-    int count;
     trie child[26];
     stack locations;
 };
 
 void debug(trie root){
-    printf("value : '%c'\nchildren : %d\n",root->value,root->count);
+    printf("value : '%c'\nchildren : %d\n",root->value,root->locations->top+1);
 }
 
 trie init(char root){
     trie temp = (trie)malloc(sizeof(trie));
     temp->value = root;
-    temp->count = 0;
     *temp->child = malloc(26*sizeof(node));
-    temp->locations = NewStack(26);
+    temp->locations = iNewStack(26);
     return temp;
 }
 
@@ -46,8 +47,7 @@ trie putChild(char value,trie t){
     trie child = init(value);
     int location = (int)value-ASCII;
     t->child[location]=child;
-    t->count++;
-    push(t->locations,location);
+    ipush(t->locations,location);
     return t->child[location];
 }
 
@@ -80,9 +80,10 @@ bool search(char * string,trie root){
         }else{return false;}
     }
     //printf("%c-%d\n",t->value,t->count);
-    return t->count==0;
+    return isEmpty(t->locations);
 }
 
-char* starts_with(){
+void starts_with(int n){
+    int XCAP  =10;
 
 }
