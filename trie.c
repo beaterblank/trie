@@ -59,10 +59,10 @@ trie getChild(char value,trie t){
 }
 
 
-void insert(char string[],int len,trie root){
+void insert(char* string,trie root){
     trie t = root;
     //printf("\ninserting %s\n",string);
-    for(int i=0;i<len;i++){
+    for(int i=0;string[i];i++){
         bool hc = hasChild(string[i],t);
         //printf("for %c from %c ,hasChild returned %d\n",string[i],t->value,hc);
         if(hc){t = getChild(string[i],t);} 
@@ -72,9 +72,9 @@ void insert(char string[],int len,trie root){
 }
 
 
-bool search(char * string,int len,trie root){
+bool search(char * string,trie root){
     trie t = root;
-    for(int i=0;i<len;i++){
+    for(int i=0;string[i];i++){
         if(hasChild(string[i],t)){
             t = getChild(string[i],t);
         }else{return false;}

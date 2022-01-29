@@ -1,3 +1,3 @@
 #!/usr/bin/sh
-gcc -o $1 $1.c -lncurses 
+gcc -o $1 $1.c -lncurses -g
 ./$1

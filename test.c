@@ -1,12 +1,12 @@
 #include "trie.c"
-
+#include <ncurses.h>
 int main(){
     trie root = init('/');
-    insert("teja",4,root);
-    insert("meeha",5,root);
+    insert("teja",root);
+    insert("meeha",root);
     debug(root);
-    insert("mohan",5,root);
-    printf("%d\n",search("mohan",5,root));
+    insert("mohan",root);
+    printf("%d\n",search("mohan",root));
     return 0;
 }
 
