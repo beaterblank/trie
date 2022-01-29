@@ -1,7 +1,10 @@
+
+//include statements 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ncurses.h>
 
 #include "istack.c"
 #include "sstack.c"
@@ -18,9 +21,22 @@ struct node{
     stack locations;
 };
 
+
+//shows the immediate children of a node
+void showChild(trie root){
+    printf("children : ");
+    for(int i=0;i<root->locations->top+1;i++){
+        printf("|-%c-|",root->child[root->locations->arr[i]]->value);
+    }
+    printf("\n");
+}
+
+
 void debug(trie root){
     printf("value : '%c'\nchildren : %d\n",root->value,root->locations->top+1);
+    showChild(root);
 }
+
 
 trie init(char root){
     trie temp = (trie)malloc(sizeof(trie));
@@ -31,9 +47,7 @@ trie init(char root){
 }
 
 bool hasChild(char value,trie t){
-    //printf("searching for %c as %d ",value,value);
     int location = (int)value-ASCII;
-    //printf("at %d\n",location);
     bool has = (t->child[location]!=NULL);
     if(has){
         if(t->child[location]->value==0){return false;}
@@ -43,7 +57,6 @@ bool hasChild(char value,trie t){
 }
 
 trie putChild(char value,trie t){
-    //printf("putting %c to %c\n",value,t->value);
     trie child = init(value);
     int location = (int)value-ASCII;
     t->child[location]=child;
@@ -52,38 +65,62 @@ trie putChild(char value,trie t){
 }
 
 trie getChild(char value,trie t){
-    //printf("getting %c from %c ",value,t->value);
     int loction = (int)(value)-ASCII;
-    //printf("got %d\n",t->child[loction]->value);
     return t->child[loction];
 }
 
-
 void insert(char* string,trie root){
     trie t = root;
-    //printf("\ninserting %s\n",string);
     for(int i=0;string[i];i++){
         bool hc = hasChild(string[i],t);
-        //printf("for %c from %c ,hasChild returned %d\n",string[i],t->value,hc);
         if(hc){t = getChild(string[i],t);} 
         else{t =  putChild(string[i],t);}
     }
     return;
 }
 
-
-bool search(char * string,trie root){
+//make a search query if a string exists or 
+bool search(char * string,trie root,bool strict){
     trie t = root;
     for(int i=0;string[i];i++){
         if(hasChild(string[i],t)){
             t = getChild(string[i],t);
         }else{return false;}
     }
-    //printf("%c-%d\n",t->value,t->count);
-    return isEmpty(t->locations);
+    if(strict){return isEmpty(t->locations);}
+    else return true;
 }
 
-void starts_with(int n){
-    int XCAP  =10;
 
+
+//getting all string from the tree using dfs
+void getStrings(sstack strings,int n,trie root,char* word){
+    int nchild = root->locations->top+1;
+    if(nchild==0){
+        push(strings,word);
+        return;
+    }
+    if(strings->stackSize>n){
+        return;
+    }
+    for(int i=0;i<nchild;i++){
+        int k = root->locations->arr[i];
+        char *newWord = append(word,root->child[k]->value);
+        getStrings(strings,n,root->child[k],newWord);
+    }
+}
+trie traverse(char* string,trie root){
+    trie tmp = root;
+    for(int i=0;string[i];i++){
+        if(hasChild(string[i],tmp)){
+            tmp = getChild(string[i],tmp);
+        }else{return NULL;}
+    }
+    return tmp;
+}
+
+sstack startsWith(char* string,trie root,int n){
+    sstack strings = newStack();
+    getStrings(strings,n,root,string);
+    return strings;
 }

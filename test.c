@@ -1,13 +1,16 @@
 #include "trie.c"
-#include <ncurses.h>
-
 int main(){
     trie root = init('/');
     insert("teja",root);
     insert("meeha",root);
-    debug(root);
     insert("mohan",root);
-    printf("%d\n",search("mohan",root));
+    insert("meeter",root);
+    sstack strings = newStack();
+    trie tmp = traverse("mee",root);
+    strings = startsWith("mee",tmp,3);
+    printf("%s\n",top(strings));
+    pop(strings);
+    printf("%s\n",top(strings));
     return 0;
 }
 

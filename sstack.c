@@ -1,3 +1,14 @@
+//code to append charecter to a string
+char *append(const char *s, char c) {
+    int len = strlen(s);
+    char buf[len+2];
+    strcpy(buf, s);
+    buf[len] = c;
+    buf[len + 1] = 0;
+    return strdup(buf);
+}
+
+
 typedef struct stack_t *  sstack;
 
 /**
@@ -78,33 +89,16 @@ char *top(sstack theStack)
  * Pop the top element from the stack; this deletes both 
  * the stack entry and the string it points to
  */
-char *pop(sstack theStack)
+void pop(sstack theStack)
 {
-  char *ret = top(theStack);
   if (theStack->head != NULL)
   {
     struct stack_entry *tmp = theStack->head;
     theStack->head = theStack->head->next;
+    free(tmp->data);
+    free(tmp);
     theStack->stackSize--;
   }
-  return ret;
 }
 
-// /**
-//  * Clear all elements from the stack
-//  */
-// void clear (sstack theStack)
-// {
-//   while (theStack->head != NULL)
-//     pop(theStack);
-// }
 
-// /**
-//  * Destroy a stack instance
-//  */
-// void destroyStack(sstack *theStack)
-// {
-//   clear(*theStack);
-//   free(*theStack);
-//   *theStack = NULL;
-// }
