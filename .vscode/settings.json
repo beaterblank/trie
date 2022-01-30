@@ -2,7 +2,10 @@
     "files.associations": {
         "stdlib.h": "c",
         "type_traits": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "ncurses.h": "c",
+        "stdio.h": "c",
+        "stdbool.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

@@ -1,82 +1,94 @@
-
 //include statements 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <ncurses.h>
 
-#include "istack.c"
+//include coustom code
 #include "sstack.c"
 
+//global constant variables
 const int ASCII = 97;
 
-
+//typedef
 typedef struct node *trie;
 typedef struct node node;
 
+
+//struct implementation
 struct node{
     char value;
-    trie child[26];
-    stack locations;
+    trie* child;
+    int locations[26];
+    int top;
 };
-
-
-//shows the immediate children of a node
-void showChild(trie root){
+//init a trie with root charecter
+trie init(char root){
+    trie temp = (trie)malloc(sizeof(trie));
+    temp->value = root;
+    temp->child = calloc(26,sizeof(trie));
+    temp->top = -1;
+    return temp;
+}
+//debug a node 
+void debug(trie root){
+    printf("value : '%c'\n",root->value);
     printf("children : ");
-    for(int i=0;i<root->locations->top+1;i++){
-        printf("|-%c-|",root->child[root->locations->arr[i]]->value);
+    for(int i=0;i<root->top+1;i++){
+        printf("|-%c-|",root->child[root->locations[i]]->value);
     }
     printf("\n");
 }
 
 
-void debug(trie root){
-    printf("value : '%c'\nchildren : %d\n",root->value,root->locations->top+1);
-    showChild(root);
-}
 
 
-trie init(char root){
-    trie temp = (trie)malloc(sizeof(trie));
-    temp->value = root;
-    *temp->child = malloc(26*sizeof(node));
-    temp->locations = iNewStack(26);
-    return temp;
-}
+// //chack if trie has a child with given value
+// bool hasChild(char value,trie t){
+//     int location = (int)value-ASCII;
+//     bool has = (t->child[location]!=NULL);
+//     if(has){
+//         if(t->child[location]->value==0){return false;}
+//         return has;
+//     }
+//     return false;
+// }
 
+
+
+//chack if trie has a child with given value
 bool hasChild(char value,trie t){
     int location = (int)value-ASCII;
-    bool has = (t->child[location]!=NULL);
-    if(has){
-        if(t->child[location]->value==0){return false;}
-        return has;
-    }
-    return false;
+    return t->child[location]!=NULL;
 }
 
+
+//put a child to trie node
 trie putChild(char value,trie t){
     trie child = init(value);
-    int location = (int)value-ASCII;
+    int location = (int)((int)value-ASCII);
     t->child[location]=child;
-    ipush(t->locations,location);
+    t->locations[++t->top]=(int)location;
     return t->child[location];
 }
 
+
+//get child with char value
 trie getChild(char value,trie t){
     int loction = (int)(value)-ASCII;
     return t->child[loction];
 }
 
+
+//insert into trie
 void insert(char* string,trie root){
     trie t = root;
-    for(int i=0;string[i];i++){
+    int len =strlen(string); 
+    for(int i=0;i<len;i++){
         bool hc = hasChild(string[i],t);
         if(hc){t = getChild(string[i],t);} 
         else{t =  putChild(string[i],t);}
     }
-    return;
 }
 
 //make a search query if a string exists or 
@@ -87,15 +99,15 @@ bool search(char * string,trie root,bool strict){
             t = getChild(string[i],t);
         }else{return false;}
     }
-    if(strict){return isEmpty(t->locations);}
+    if(strict){return t->top==-1;}
     else return true;
 }
 
 
 
-//getting all string from the tree using dfs
+// //getting all string from the tree using dfs
 void getStrings(sstack strings,int n,trie root,char* word){
-    int nchild = root->locations->top+1;
+    int nchild = root->top+1;
     if(nchild==0){
         push(strings,word);
         return;
@@ -104,11 +116,13 @@ void getStrings(sstack strings,int n,trie root,char* word){
         return;
     }
     for(int i=0;i<nchild;i++){
-        int k = root->locations->arr[i];
+        int k = root->locations[i];
         char *newWord = append(word,root->child[k]->value);
         getStrings(strings,n,root->child[k],newWord);
     }
 }
+
+
 trie traverse(char* string,trie root){
     trie tmp = root;
     for(int i=0;string[i];i++){
