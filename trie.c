@@ -40,10 +40,9 @@ void debug(trie root){
     printf("\n");
 }
 
-//chack if trie has a child with given value
+//check if trie has a child with given value
 bool hasChild(char value,trie t){
-    int location = (int)value-ASCII;
-    return t->child[location]!=NULL;
+    return t->child[(int)value-ASCII]!=NULL;
 }
 
 
@@ -75,7 +74,8 @@ void insert(char* string,trie root){
     }
 }
 
-//make a search query if a string exists or 
+//make a search query if a string exists or not with strict enabled
+//with strict disabled it will check for prefix
 bool search(char * string,trie root,bool strict){
     trie t = root;
     for(int i=0;string[i];i++){
@@ -107,7 +107,7 @@ void getStrings(sstack strings,int n,trie root,char* word){
 }
 
 
-//to traverse the trie and reuturn the traverseed 
+//to traverse the trie and reuturn the trie
 trie traverse(char* string,trie root){
     trie tmp = root;
     for(int i=0;string[i];i++){

@@ -72,7 +72,9 @@ int main()
             hline('-',Xmax);
             move(y, x - l);
             clrtobot();
+            
             ch = getch();
+            
             char buff[2];
             buff[0] = ch;
             buff[1] = '\0';
