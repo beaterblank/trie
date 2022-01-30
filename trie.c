@@ -40,22 +40,6 @@ void debug(trie root){
     printf("\n");
 }
 
-
-
-
-// //chack if trie has a child with given value
-// bool hasChild(char value,trie t){
-//     int location = (int)value-ASCII;
-//     bool has = (t->child[location]!=NULL);
-//     if(has){
-//         if(t->child[location]->value==0){return false;}
-//         return has;
-//     }
-//     return false;
-// }
-
-
-
 //chack if trie has a child with given value
 bool hasChild(char value,trie t){
     int location = (int)value-ASCII;
@@ -123,6 +107,7 @@ void getStrings(sstack strings,int n,trie root,char* word){
 }
 
 
+//to traverse the trie and reuturn the traverseed 
 trie traverse(char* string,trie root){
     trie tmp = root;
     for(int i=0;string[i];i++){
@@ -133,6 +118,7 @@ trie traverse(char* string,trie root){
     return tmp;
 }
 
+//get all strings but with return type
 sstack startsWith(char* string,trie root,int n){
     sstack strings = newStack();
     getStrings(strings,n,root,string);
