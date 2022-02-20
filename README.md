@@ -1,3 +1,3 @@
 # trie
 implementation of trie
-aa
+using a dictionary
