@@ -85,6 +85,12 @@ char *top(sstack theStack)
     return NULL;
 }
 
+
+
+
+
+
+
 /**
  * Pop the top element from the stack; this deletes both 
  * the stack entry and the string it points to

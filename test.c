@@ -23,6 +23,25 @@ void prompt(int y)
     attroff(COLOR_PAIR(1));
 }
 
+
+int printStack(sstack theStack){
+  struct stack_entry *temp = theStack->head;
+  int l = 0;
+  while (temp)
+  {
+    printw("%s",temp->data);
+    l+=strlen(temp->data);
+    temp = temp->next;
+    printw(" || ");
+    l+=4;
+  }
+  return l;
+}
+
+
+#include "dict.c"
+
+
 int main()
 {
 
@@ -57,10 +76,11 @@ int main()
 
     int Xmax=0,Ymax=0;
     getmaxyx(stdscr,Ymax,Xmax);
-    move(Ymax-2,0);
+    move(1,0);
     hline('-',Xmax);
-    prompt(Ymax-1);
+    prompt(2);
     int l = 0;
+    char inp[100];
     do
     {
         if (kbhit())
@@ -78,8 +98,9 @@ int main()
             char buff[2];
             buff[0] = ch;
             buff[1] = '\0';
-
+            
             if(ch>='a' && ch<='z'){
+                strcpy(inp,strncat(inp,&ch,1));
                 attron(COLOR_PAIR(2));
                 printw("%c", ch);
                 attroff(COLOR_PAIR(2));
@@ -89,15 +110,17 @@ int main()
                     l = 0;
                     if (temp)
                     {
-                        str = top(startsWith("", temp, 1));
-                        printw("%s", str);
-                        l = strlen(str);
+                        sstack words = startsWith("", temp, 5);
+                        l = printStack(words);
+                        get(inp);
+                        //mvprintw(1,1,"%s",inp);
                     }
                 }else{l=0;}
             }
             attroff(COLOR_PAIR(1));
             if (ch == 10)
             {
+                strcpy(inp,"");
                 temp = root;
                 clear();
                 int x = 0, y = 0;
@@ -105,9 +128,10 @@ int main()
                 move(y-1,0);
                 hline('-',Xmax);
                 l=0;
-                prompt(Ymax-1);
+                prompt(2);
             }
         }
+        
         refresh();
     } while (ch != '!');
 

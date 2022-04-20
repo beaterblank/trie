@@ -22,6 +22,7 @@ struct node{
     int locations[26];
     int top;
 };
+
 //init a trie with root charecter
 trie init(char root){
     trie temp = (trie)malloc(sizeof(trie));
