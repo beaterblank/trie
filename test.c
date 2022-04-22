@@ -52,14 +52,23 @@ int main()
     scrollok(stdscr, TRUE);
 
     trie root = init('/');
+    trie music = init('/');
 
     insert("teja", root);
     insert("meeha", root);
     insert("mohan", root);
     insert("meeter", root);
 
-    trie temp = root;
 
+    insert("abc",music);
+    insert("dbdfac",music);
+    insert("edfasd",music);
+    insert("bbc",music);
+    insert("cbdfac",music);
+    insert("fdfasd",music);
+
+    trie temp = root;
+    trie misc = music;
     char ch;
 
     if (has_colors() == FALSE)
@@ -81,6 +90,7 @@ int main()
     prompt(2);
     int l = 0;
     char inp[100];
+    int mode =0;
     do
     {
         if (kbhit())
@@ -98,23 +108,25 @@ int main()
             char buff[2];
             buff[0] = ch;
             buff[1] = '\0';
-            
+
+            if(ch == '1')mode=1;
+            if(ch == '0')mode=0;
+
             if(ch>='a' && ch<='z'){
                 strcpy(inp,strncat(inp,&ch,1));
                 attron(COLOR_PAIR(2));
                 printw("%c", ch);
                 attroff(COLOR_PAIR(2));
-                if (temp){
+                if(mode==0 && temp){
                     temp = traverse(buff, temp);
-                    char *str;
                     l = 0;
                     if (temp)
                     {
                         sstack words = startsWith("", temp, 5);
                         l = printStack(words);
                         get(inp);
-                        //mvprintw(1,1,"%s",inp);
                     }
+                }
                 }else{l=0;}
             }
             attroff(COLOR_PAIR(1));
@@ -122,6 +134,7 @@ int main()
             {
                 strcpy(inp,"");
                 temp = root;
+                misc = music;
                 clear();
                 int x = 0, y = 0;
                 getsyx(y, x);
@@ -130,8 +143,8 @@ int main()
                 l=0;
                 prompt(2);
             }
+
         }
-        
         refresh();
     } while (ch != '!');
 
