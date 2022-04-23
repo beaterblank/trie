@@ -54,10 +54,11 @@ int main()
     trie root = init('/');
     trie music = init('/');
 
-    insert("teja", root);
-    insert("meeha", root);
-    insert("mohan", root);
-    insert("meeter", root);
+    insert("same", root);
+    insert("sameeha", root);
+    insert("samaritan", root);
+    insert("samaria", root);
+    insert("samurai", root);
 
 
     insert("abc",music);
@@ -91,11 +92,8 @@ int main()
     int l = 0;
     char inp[100];
     int mode =0;
-    do
-    {
-        if (kbhit())
-        {
-            
+    do{
+        if (kbhit()){
             int x = 0, y = 0;
             getsyx(y, x);
             move(y-1,0);
@@ -109,8 +107,8 @@ int main()
             buff[0] = ch;
             buff[1] = '\0';
 
-            if(ch == '1')mode=1;
-            if(ch == '0')mode=0;
+            if(ch == '1'){mode=1;ch=10;}
+            if(ch == '0'){mode=0;ch=10;}
 
             if(ch>='a' && ch<='z'){
                 strcpy(inp,strncat(inp,&ch,1));
@@ -126,8 +124,17 @@ int main()
                         l = printStack(words);
                         get(inp);
                     }
+                }else if(misc){
+                    misc = traverse(buff,misc);
+                    l=0;
+                    if (misc)
+                    {
+                        sstack words = startsWith("", misc, 5);
+                        l = printStack(words);
+                        get(inp);
+                    }
                 }
-                }else{l=0;}
+                else{l=0;}
             }
             attroff(COLOR_PAIR(1));
             if (ch == 10)
@@ -147,7 +154,6 @@ int main()
         }
         refresh();
     } while (ch != '!');
-
     endwin();
     return 0;
 }
