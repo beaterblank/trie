@@ -54,11 +54,16 @@ int main()
     trie root = init('/');
     trie music = init('/');
 
-    insert("same", root);
+    insert("sample", root);
     insert("sameeha", root);
     insert("samaritan", root);
     insert("samaria", root);
     insert("samurai", root);
+    insert("rash", root);
+    insert("rassle", root);
+    insert("rashness", root);
+    insert("rashmi", root);
+    insert("rascal", root);
 
 
     insert("abc",music);
